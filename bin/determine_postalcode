@@ -1,0 +1,69 @@
+#!/usr/bin/env ruby
+
+require 'postalcode_geocoder'
+require 'active_support/core_ext'
+
+# TODO, move to env
+ENV['GEOLOCATION_API_KEY'] =
+ENV['GEOLOCATION_API_SITE'] =
+LONGITUDE_COLUMN = 'longitude'
+LATITUDE_COLUMN = 'latitude'
+
+file_name = '../stedelijkheid.csv'
+collector = PostalcodeGeocoder::Collector.new
+parser = PostalcodeGeocoder::FileParser.new(file_name)
+
+headers = parser.headers
+augmented_headers = headers
+data = parser.parse
+
+def bsearch_highest_val(data)
+  values = data.values
+  last_val = 0
+  last_val = -1 if values[0][LONGITUDE_COLUMN].nil?
+  index = data.size / 2
+  adjuster = index
+  while(last_val < data.size && !values[last_val+1][LONGITUDE_COLUMN].nil?) do
+    if values[index][LONGITUDE_COLUMN].nil?
+      adj = -1
+    else
+      last_val = index
+      adj = 1
+    end
+    adjuster = (adjuster /  2) + 1
+    index += adj * adjuster
+  end
+  last_val
+end
+
+if(headers.include?(LONGITUDE_COLUMN) && headers.include?(LATITUDE_COLUMN))
+  last_val = bsearch_highest_val(data)
+  keys = data.keys[0..last_val]
+  uncalculated_data = data.slice!(*keys)
+else
+  augmented_headers << LONGITUDE_COLUMN
+  augmented_headers << LATITUDE_COLUMN
+
+end
+puts uncalculated_data
+
+results = collector.run!(uncalculated_data.keys)
+
+CSV.open("../stedelijkheid.csv", "wb",
+         col_sep: ';',
+         write_headers: true,
+         headers: augmented_headers) do |csv|
+  data.each do |postal_code, object|
+    arr = []
+    augmented_headers.each { |header| arr << object[header] }
+    csv << arr
+  end
+  
+  results.each do |postal_code, google_object|
+    arr = []
+    headers.each { |header| arr << data[postal_code][header] }
+    arr << google_object.longitude
+    arr << google_object.latitude
+    csv << arr
+  end
+end
