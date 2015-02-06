@@ -2,8 +2,13 @@ require "postalcode_geocoder/version"
 require 'postalcode_geocoder/file_parser'
 require 'postalcode_geocoder/sessions'
 require 'postalcode_geocoder/models'
+require 'postalcode_geocoder/csv_exporter'
+require 'postalcode_geocoder/uncalculated_data_finder'
 
 module PostalcodeGeocoder
+  LONGITUDE_COLUMN = 'longitude'
+  LATITUDE_COLUMN = 'latitude'
+
   class Collector
     def initialize
       @session = Sessions::Session.new
