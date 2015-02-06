@@ -4,8 +4,8 @@ require 'postalcode_geocoder'
 require 'active_support/core_ext'
 
 # TODO, move to env
-ENV['GEOLOCATION_API_KEY'] =
-ENV['GEOLOCATION_API_SITE'] =
+ENV['GEOLOCATION_API_KEY'] = 'AIzaSyDDQq73GrmSriyynlGlp1V1KlkVq9xCLJk'
+ENV['GEOLOCATION_API_SITE'] = 'https://maps.googleapis.com/maps/api/geocode/'
 LONGITUDE_COLUMN = 'longitude'
 LATITUDE_COLUMN = 'latitude'
 
@@ -43,7 +43,6 @@ if(headers.include?(LONGITUDE_COLUMN) && headers.include?(LATITUDE_COLUMN))
 else
   augmented_headers << LONGITUDE_COLUMN
   augmented_headers << LATITUDE_COLUMN
-
 end
 puts uncalculated_data
 
@@ -61,7 +60,7 @@ CSV.open("../stedelijkheid.csv", "wb",
   
   results.each do |postal_code, google_object|
     arr = []
-    headers.each { |header| arr << data[postal_code][header] }
+    headers.each { |header| arr << uncalculated_data[postal_code][header] }
     arr << google_object.longitude
     arr << google_object.latitude
     csv << arr

@@ -11,10 +11,12 @@ module PostalcodeGeocoder
       attribute :geometry, Hash
 
       def latitude
+        return nil unless geometry
         geometry['location']['lat']
       end
 
       def longitude
+        return nil unless geometry
         geometry['location']['lng']
       end
 
