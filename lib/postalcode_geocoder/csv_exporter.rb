@@ -11,7 +11,6 @@ module PostalcodeGeocoder
         my_headers.delete LONGITUDE_COLUMN
         my_headers.delete LATITUDE_COLUMN
         data.each do |postal_code, object|
-          puts postal_code
           arr = [postal_code]
           my_headers.each do |header|
             arr << object[header]
