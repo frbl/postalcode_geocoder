@@ -19,7 +19,6 @@ function processData(csv_content) {
         for (var j=0; j<headers.length; j++) {
             tarr.push(data[j]);
         }
-        mapping[tarr[0]] = [tarr[4],tarr[3]]
+        mapping[tarr[0]] = [tarr[3],tarr[2]]
     }
-    console.log(mapping);
 }

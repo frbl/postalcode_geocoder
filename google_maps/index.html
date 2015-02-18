@@ -9,6 +9,16 @@
         margin: 0px;
         padding: 0px
       }
+      #panel {
+              position: absolute;
+              top: 5px;
+              left: 50%;
+              margin-left: -180px;
+              z-index: 5;
+              background-color: #fff;
+              padding: 5px;
+              border: 1px solid #999;
+            }
     </style>
     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=visualization"></script>
@@ -17,6 +27,32 @@
   </head>
 
   <body>
+    <div id="panel">
+      <form>
+        <label> Density </label>
+        <select id='density' class="target">
+        </select>
+      </form>
+    </div>
     <div id="map-canvas"></div>
+    
+    <script>
+    $(document).ready(function(){
+      for(i = 5 ; i < 100 ; i+=5) {
+        $('#density')
+        .append($("<option></option>")
+        .attr("value",i)
+        .text(i)); 
+      }
+      var density = $('#density').val();
+      heatmap.set('radius', parseInt(density));
+    });
+    
+    
+    $( ".target" ).change(function() {
+      console.log(heatmap)
+      heatmap.set('radius', parseInt(this.value));
+    });
+    </script>
   </body>
 </html>

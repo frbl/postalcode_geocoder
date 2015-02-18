@@ -18,6 +18,7 @@ module PostalcodeGeocoder
       results = {}
       over_quota = false
       postal_code_list.each do |postal_code|
+	sleep 1.0/5.0
         puts "Processing #{postal_code}"
         address = convert_to_national_postalcode 'The Netherlands', postal_code
         result = @session.get(address: address, components: components('NL'))

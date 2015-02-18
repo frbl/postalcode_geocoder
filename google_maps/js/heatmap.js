@@ -1,7 +1,8 @@
 // Adding 500 Data Points
+var heatmap;
+
 function initialize(data) {
-  var map, pointarray, heatmap;
-  
+  var map, pointarray;  
   var mapOptions = {
     zoom: 8,
     center: new google.maps.LatLng(52.084695, 5.103365),
